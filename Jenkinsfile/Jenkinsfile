@@ -1,0 +1,30 @@
+pipeline {
+    agent {
+        label 'agent'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url:'https://github.com/PriyeshPandey07/bootstrap-website.git', branch: 'main'
+            }
+        }
+    
+        stage("build image")
+        {
+            steps {
+                script {
+                    sh "docker build -t avengerimg:latest ."
+                }
+            }
+        }
+        stage("run image")
+        {
+            steps {
+                script {
+                    sh "docker run -dit --name web -p 6000:80 avengerimg:latest"
+                }
+            }
+        }
+    }
+}
